@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.score {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+.game > ul {
+  border: 1px solid #555;
+  width: 250px;
+  margin: 0 auto;
+}
+
+.game > ul > li {
+  width: 100%;
+  height: 25px;
+}
+
+.game > ul > li > ul {
+  display: flex;
+}
+
+.game > ul > li > ul > li {
+  width: 25px;
+  height: 25px;
+  outline: 1px solid #ccc;
+}
