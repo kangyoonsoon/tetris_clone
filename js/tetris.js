@@ -110,11 +110,16 @@ function renderBlocks() {
 }
 
 function seizeBlock() {
-  console.log("seize block");
+  // console.log("seize block");
+  const movingBlocks = document.querySelectorAll(".moving");
+  moveBlock.forEach(moving => {
+    moving.classList.remove("moving");
+    moving.classList.add("seized");
+  })
 }
 
 function checkEmpty(target) {
-  if (!target) {
+  if (!target || target.classList.contains("seized")) {
     return false;
   }
   return true;
