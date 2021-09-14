@@ -4,7 +4,8 @@ import BLOCKS from "./blocks.js";
 const game = document.querySelector(".game > ul");
 const gameText = document.querySelector(".game-text");
 const startButton = document.querySelector(".game-text > button");
-const scoreDisplay = document.querySelector(".score");
+const scoreDisplay = document.querySelector(".score-text >.score");
+const scoreEnd = document.querySelector(".game-text >.score");
 
 // variables
 const GAME_ROWS = 20;
@@ -108,6 +109,7 @@ function checkMatch() {
       prependNewLine();
       score++;
       scoreDisplay.innerText = score;
+      scoreEnd.innerText = score;
     }
   });
 
