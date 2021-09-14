@@ -14,7 +14,7 @@ let downInterval;
 let tempMovingItem;
 
 const movingItem = {
-  type: "tree",
+  type: "",
   direction: 3,
   top: 0,
   left: 3,
@@ -30,7 +30,8 @@ function init() {
     prependNewLine();
   }
 
-  renderBlocks();
+  // renderBlocks();
+  generateNewBlock();
 }
 
 function prependNewLine() {
@@ -50,17 +51,14 @@ function renderBlocks(moveType = "") {
   const { type, direction, top, left } = tempMovingItem;
   const movingBlocks = document.querySelectorAll(".moving");
   movingBlocks.forEach((moving) => {
-    // console.log(moving);
     moving.classList.remove(type, "moving");
   });
   BLOCKS[type][direction].forEach((block) => {
     const x = block[0] + left;
     const y = block[1] + top;
-    // console.log(game.childNodes[y]);
     const target = game.childNodes[y]
       ? game.childNodes[y].childNodes[0].childNodes[x]
       : null;
-    // console.log(target);
     const isAvailable = checkEmpty(target);
     if (isAvailable) {
       target.classList.add(type, "moving");
@@ -72,27 +70,28 @@ function renderBlocks(moveType = "") {
           seizeBlock();
         }
       }, 0);
-      // renderBlocks();
     }
   });
-  // console.log(BLOCKS[type][direction]);
   movingItem.left = left;
   movingItem.top = top;
   movingItem.direction = direction;
-  console.log({ movingItem });
 }
 
 function seizeBlock() {
-  // console.log("seize block");
   const movingBlocks = document.querySelectorAll(".moving");
   movingBlocks.forEach((moving) => {
     moving.classList.remove("moving");
     moving.classList.add("seized");
   });
-  // generateNewBlock();
+  setTimeout(() => {
+    generateNewBlock();
+  }, 0);
 }
 
 function generateNewBlock() {
+  const blockArray = Object.entries(BLOCKS);
+  const randomIndex = Math.floor(Math.random() * blockArray.length);
+  movingItem.type = blockArray[randomIndex][0];
   movingItem.top = 0;
   movingItem.left = 3;
   movingItem.direction = 0;
@@ -120,6 +119,12 @@ function changeDirection() {
   renderBlocks();
 }
 
+function dropBlock() {
+  clearInterval(downInterval);
+  downInterval = setInterval(() => {
+    moveBlock("top", 1);
+  }, 10);
+}
 // event handling
 document.addEventListener("keydown", (e) => {
   switch (e.keyCode) {
@@ -135,8 +140,11 @@ document.addEventListener("keydown", (e) => {
     case 38:
       changeDirection();
       break;
+    case 32:
+      dropBlock();
+      break;
     default:
       break;
   }
-  // console.log(e);
+  console.log(e);
 });

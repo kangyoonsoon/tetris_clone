@@ -39,5 +39,20 @@ body {
 }
 
 .tree {
-  background: #67c23a;
+  background-color: rgb(36, 163, 64);
+}
+.bar {
+  background-color: rgb(25, 6, 59);
+}
+.square {
+  background-color: rgb(185, 156, 28);
+}
+.elLeft {
+  background-color: rgb(32, 3, 3);
+}
+.elRight {
+  background-color: rgb(167, 52, 17);
+}
+.zee {
+  background-color: rgb(17, 82, 167);
 }
