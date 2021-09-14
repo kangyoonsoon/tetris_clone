@@ -2,12 +2,13 @@ import BLOCKS from "./blocks.js";
 
 // DOM
 const game = document.querySelector(".game > ul");
-
-// SETTING
-const GAME_ROWS = 20;
-const GAME_COLS = 10;
+const gameText = document.querySelector(".game-text");
+const startButton = document.querySelector(".game-text > button");
+const scoreDisplay = document.querySelector("score");
 
 // variables
+const GAME_ROWS = 20;
+const GAME_COLS = 10;
 let score = 0;
 let duration = 500;
 let downInterval;
@@ -65,12 +66,16 @@ function renderBlocks(moveType = "") {
       target.classList.add(type, "moving");
     } else {
       tempMovingItem = { ...movingItem };
+      if (moveType === "end") {
+        clearInterval(downInterval);
+        showGameOver();
+      }
       setTimeout(() => {
-        renderBlocks();
+        renderBlocks("end");
         if (moveType === "top") {
           seizeBlock();
         }
-      }, 0);
+      }, 5);
       return true;
     }
   });
@@ -150,6 +155,11 @@ function dropBlock() {
     moveBlock("top", 1);
   }, 10);
 }
+
+function showGameOver() {
+  gameText.style.display = "flex";
+}
+
 // event handling
 document.addEventListener("keydown", (e) => {
   switch (e.keyCode) {
@@ -172,4 +182,9 @@ document.addEventListener("keydown", (e) => {
       break;
   }
   // console.log(e);
+});
+startButton.addEventListener("click", () => {
+  game.innerHTML = "";
+  gameText.style.display = "none";
+  init();
 });
