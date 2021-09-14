@@ -1,5 +1,6 @@
-// DOM
+import BLOCKS from "./blocks.js";
 
+// DOM
 const game = document.querySelector(".game > ul");
 
 // SETTING
@@ -11,35 +12,6 @@ let score = 0;
 let duration = 500;
 let downInterval;
 let tempMovingItem;
-
-const BLOCKS = {
-  tree: [
-    [
-      [2, 1],
-      [0, 1],
-      [1, 0],
-      [1, 1],
-    ],
-    [
-      [1, 2],
-      [0, 1],
-      [1, 0],
-      [1, 1],
-    ],
-    [
-      [1, 2],
-      [0, 1],
-      [2, 1],
-      [1, 1],
-    ],
-    [
-      [2, 1],
-      [1, 2],
-      [1, 0],
-      [1, 1],
-    ],
-  ],
-};
 
 const movingItem = {
   type: "tree",
@@ -74,7 +46,7 @@ function prependNewLine() {
   game.prepend(li);
 }
 
-function renderBlocks() {
+function renderBlocks(moveType = "") {
   const { type, direction, top, left } = tempMovingItem;
   const movingBlocks = document.querySelectorAll(".moving");
   movingBlocks.forEach((moving) => {
@@ -84,7 +56,7 @@ function renderBlocks() {
   BLOCKS[type][direction].forEach((block) => {
     const x = block[0] + left;
     const y = block[1] + top;
-    console.log({ game });
+    // console.log(game.childNodes[y]);
     const target = game.childNodes[y]
       ? game.childNodes[y].childNodes[0].childNodes[x]
       : null;
@@ -107,15 +79,25 @@ function renderBlocks() {
   movingItem.left = left;
   movingItem.top = top;
   movingItem.direction = direction;
+  console.log({ movingItem });
 }
 
 function seizeBlock() {
   // console.log("seize block");
   const movingBlocks = document.querySelectorAll(".moving");
-  moveBlock.forEach(moving => {
+  movingBlocks.forEach((moving) => {
     moving.classList.remove("moving");
     moving.classList.add("seized");
-  })
+  });
+  // generateNewBlock();
+}
+
+function generateNewBlock() {
+  movingItem.top = 0;
+  movingItem.left = 3;
+  movingItem.direction = 0;
+  tempMovingItem = { ...movingItem };
+  renderBlocks();
 }
 
 function checkEmpty(target) {
