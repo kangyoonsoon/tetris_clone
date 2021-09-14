@@ -50,10 +50,11 @@ function prependNewLine() {
 function renderBlocks(moveType = "") {
   const { type, direction, top, left } = tempMovingItem;
   const movingBlocks = document.querySelectorAll(".moving");
+  // console.log(movingBlocks);
   movingBlocks.forEach((moving) => {
     moving.classList.remove(type, "moving");
   });
-  BLOCKS[type][direction].forEach((block) => {
+  BLOCKS[type][direction].some((block) => {
     const x = block[0] + left;
     const y = block[1] + top;
     const target = game.childNodes[y]
@@ -70,6 +71,7 @@ function renderBlocks(moveType = "") {
           seizeBlock();
         }
       }, 0);
+      return true;
     }
   });
   movingItem.left = left;
@@ -83,12 +85,35 @@ function seizeBlock() {
     moving.classList.remove("moving");
     moving.classList.add("seized");
   });
-  setTimeout(() => {
-    generateNewBlock();
-  }, 0);
+
+  checkMatch();
 }
 
+function checkMatch() {
+  const childNodes = game.childNodes;
+  // console.log(childNodes);
+  childNodes.forEach((child) => {
+    let matched = true;
+    child.childNodes[0].childNodes.forEach((li) => {
+      if (!li.classList.contains("seized")) {
+        matched = false;
+      }
+    });
+    if (matched) {
+      child.remove();
+      prependNewLine();
+      score++;
+      scoreDisplay.innerText = score;
+    }
+  });
+
+  generateNewBlock();
+}
 function generateNewBlock() {
+  clearInterval(downInterval);
+  downInterval = setInterval(() => {
+    moveBlock("top", 1);
+  }, duration);
   const blockArray = Object.entries(BLOCKS);
   const randomIndex = Math.floor(Math.random() * blockArray.length);
   movingItem.type = blockArray[randomIndex][0];
@@ -146,5 +171,5 @@ document.addEventListener("keydown", (e) => {
     default:
       break;
   }
-  console.log(e);
+  // console.log(e);
 });
